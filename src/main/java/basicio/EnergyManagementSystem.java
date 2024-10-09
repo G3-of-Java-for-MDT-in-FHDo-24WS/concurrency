@@ -12,7 +12,7 @@ public class EnergyManagementSystem {
         // Create log for a specific equipment
         Path logPath = logManager.addContentToLog(equipmentName, "Charging session started.\n");
         
-        logManager.moveLog(logPath, Paths.get("logsDirToMove"));
+        logManager.moveLog(logPath, Paths.get("logs_moved"));
         
         logManager.addContentToLog(equipmentName, "Charging session started.\n");
         logManager.deleteLog(logPath);
