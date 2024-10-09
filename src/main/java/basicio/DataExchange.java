@@ -1,34 +1,102 @@
 package basicio;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Random;
+
+import basicio.LogManager.LogType;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class DataExchange {
-	public void byteExchange(String source, String target) throws IOException {
-		try(FileInputStream in = new FileInputStream(source);
-				FileOutputStream out = new FileOutputStream(target)) {
-			
-			int byteData;
-			
-			while((byteData = in.read()) != -1) {
-				out.write(byteData);
-			}
-		}
-	}
+    private static final Dotenv dotenv = Dotenv.load();
+	private final static Path logDirChargingStationPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
+	private final static LogManager chargingStationLogManager = new LogManager(LogType.CHARGING_STATION);
 	
-	public void characterExchange(String source, String target) throws IOException {
-		try(BufferedReader in = Files.newBufferedReader(Paths.get(source));
-				BufferedWriter out = Files.newBufferedWriter( Paths.get(target))) {
-			
-			String line;
-			while((line = in.readLine()) != null) {
-				out.write(line);
+    public void sendSensorData(Path targetPath) {
+        try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(targetPath))) {
+            byte[] sensorData = generateSensorData(256);
+            out.write(sensorData);
+            System.out.println("Sensor data sent to " + targetPath.getFileName());
+        } catch (IOException e) {
+        	System.err.println("Error during sending sensor data: " + e.getMessage());
+        }
+    }
+    
+    public void receiveSensorData(Path sourcePath) throws IOException {
+    	if(!Files.exists(sourcePath)) {
+    		throw new FileNotFoundException("The source file was not found!");
+    	}
+    	
+    	if(!Files.isRegularFile(sourcePath)) {
+    		throw new IOException("The source file is not a regular file!");
+    	}
+    	
+        try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(sourcePath))) {
+            byte[] receivedData = in.readAllBytes();
+            processSensorData(receivedData);
+            System.out.println("Sensor data received from " + sourcePath.getFileName());
+        }
+    }
+	
+	
+    private byte[] generateSensorData(int length) {
+        byte[] data = new byte[length]; 
+        new Random().nextBytes(data);
+        return data;
+    }
+
+    private void processSensorData(byte[] data) {
+        System.out.println("Processing sensor data of size: " + data.length + " bytes");
+    }
+    
+    
+    private void wirteChargingStationLog(String chargingStationName, String message) {
+    	String logName = LogManager.generateLogName(chargingStationName);
+    	Path logPath = logDirChargingStationPath.resolve(logName);
+    	
+    	if(!Files.exists(logPath)) {
+    		try {
+				chargingStationLogManager.createLog(chargingStationName, message);
+			} catch (IOException e) {
+				System.err.format("Error during creating %s!%n", logName);
 			}
-		}
-	}
+    	} else {
+    		try(BufferedWriter writer = Files.newBufferedWriter(logPath, StandardOpenOption.APPEND)) {
+    			writer.write(message);
+    			
+    		} catch (IOException e) {
+    			System.err.format("Error during adding content to %s!%n", logName);
+			}
+    	}
+    }
+    
+    private void readChargingStationLog(String logName) throws IOException {
+    	Path logPath = logDirChargingStationPath.resolve(logName);
+    	
+    	if(!Files.exists(logPath)) {
+    		throw new FileNotFoundException(logName + " was not found!");
+    	}
+    	
+    	if(!Files.isRegularFile(logPath)) {
+    		throw new IOException(logName + " is not a regular file!");
+    	}
+    	
+        try (BufferedReader reader = Files.newBufferedReader(logPath)) {
+        	String line;
+        	while((line = reader.readLine()) != null) {
+        		System.out.println(line);
+        	}
+        } catch(IOException e) {
+        	System.err.format("Error during reading %s!%n", logName);
+        }
+    }
+	
 }
