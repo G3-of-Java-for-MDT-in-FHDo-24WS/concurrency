@@ -10,15 +10,16 @@ public class EnergyManagementSystem {
         String equipmentName = "ChargingStation1";
 
         // Create log for a specific equipment
-        Path logPath = logManager.addContentToLog(equipmentName, "Charging session started.\n");
-        
-        logManager.moveLog(logPath, Paths.get("logs_moved"));
-        
+//        Path logPath = logManager.addContentToLog(equipmentName, "Charging session started.\n");
         logManager.addContentToLog(equipmentName, "Charging session started.\n");
-        logManager.deleteLog(logPath);
         
-        logManager.addContentToLog(equipmentName, "Charging session started.\n");
-        logManager.archiveLog(logPath);
+//        logManager.moveLog(logPath, Paths.get("logs_moved"));
+//        
+//        logManager.addContentToLog(equipmentName, "Charging session started.\n");
+//        logManager.deleteLog(logPath);
+//        
+//        logManager.addContentToLog(equipmentName, "Charging session started.\n");
+//        logManager.archiveLog(logPath);
         
         Path sensorData = DataExchange.sendSensorData("temp_data/sensor.temp");
         DataExchange.receiveSensorData(sensorData.toString());

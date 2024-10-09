@@ -35,7 +35,7 @@ public class LogManager {
             try {
 				Files.createDirectories(logDirPath);
 				
-				System.out.format("Log manager %s has created!", logType.toString());
+				System.out.format("Log manager %s has created!\n", logType.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

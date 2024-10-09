@@ -71,8 +71,7 @@ public class DataExchange {
     
     
     public static Path wirteChargingStationLog(String chargingStationName, String message) {
-    	String logName = LogManager.generateLogName(chargingStationName);
-		return chargingStationLogManager.addContentToLog(logName, message);
+		return chargingStationLogManager.addContentToLog(chargingStationName, message);
     }
     
     public static void readChargingStationLog(Path logPath) throws IOException {
