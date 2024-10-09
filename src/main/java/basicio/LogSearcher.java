@@ -1,13 +1,15 @@
 package basicio;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.*;
 
+import basicio.LogManager.LogType;
+
 public class LogSearcher {
-
-    private final String logDirectory = "logs/";
-
-    public void searchLogByPattern(String pattern) throws IOException {
+    public void searchLogByPattern(String logDirectory, String pattern) throws IOException {
         File dir = new File(logDirectory);
         File[] files = dir.listFiles();
         Pattern regex = Pattern.compile(pattern);
@@ -19,6 +21,18 @@ public class LogSearcher {
                 displayLog(file);
             }
         }
+    }
+    
+    // TODO To be complete
+    public List<Path> searchLogListByPattern(String pattern) {
+    	List<Path> pathList = new ArrayList<>();
+    	return pathList;
+    }
+    
+    // TODO To be complete
+    public List<Path> searchLogListByPattern(String pattern, LogType logType) {
+    	List<Path> pathList = new ArrayList<>();
+    	return pathList;
     }
 
     private void displayLog(File file) throws IOException {

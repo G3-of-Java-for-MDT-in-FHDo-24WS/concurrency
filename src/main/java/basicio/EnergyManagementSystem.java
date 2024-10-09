@@ -9,10 +9,10 @@ public class EnergyManagementSystem {
         String logFileName = LogManager.generateLogName(equipmentName);
 
         // Create log for a specific equipment
-        logManager.createLog(logFileName, "Charging session started.");
+        logManager.addContentToLog(logFileName, "Charging session started.\n");
 
         // Search for logs by name or date using regex
         LogSearcher searcher = new LogSearcher();
-        searcher.searchLogByPattern("ChargingStation1_\\d{4}-\\d{2}-\\d{2}");
+        searcher.searchLogByPattern("logs/charging_station", "ChargingStation1_\\d{4}-\\d{2}-\\d{2}");
     }
 }
