@@ -2,7 +2,7 @@
 
 ## Role Distribution and Screencast Link
 <!-- TODO -->
-- Yanal Al Halabi, 7221683
+- Yanal Al Halabi, 7221683, my role was to create the basic file management and maintain the main application.
   - ([link](https://drive.google.com/file/d/1G4m8ErQxRVD3iQjGR3B8emTbwOyRQvDt/view?usp=sharing))
 - Linxin Zhang, 7221539
   - (link)
