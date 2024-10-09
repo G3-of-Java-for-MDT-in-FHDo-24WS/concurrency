@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class EnergyManagementSystem {
 	public static void main(String[] args) throws IOException {
-        LogManager logManager = new LogManager();
+        LogManager logManager = new LogManager(LogManager.LogType.CHARGING_STATION);
         String equipmentName = "ChargingStation1";
-        String logFileName = logManager.generateLogName(equipmentName);
+        String logFileName = LogManager.generateLogName(equipmentName);
 
         // Create log for a specific equipment
         logManager.createLog(logFileName, "Charging session started.");
