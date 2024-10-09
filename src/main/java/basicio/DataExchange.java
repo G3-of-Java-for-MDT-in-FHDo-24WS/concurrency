@@ -17,7 +17,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class DataExchange {
     private static final Dotenv dotenv = Dotenv.load();
-	private final static Path logDirChargingStationPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
+	private final static Path logChargingStationDirPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
 	private final static LogManager chargingStationLogManager = new LogManager(LogType.CHARGING_STATION);
 	
     public void sendSensorData(Path targetPath) {
@@ -60,7 +60,7 @@ public class DataExchange {
     
     private void wirteChargingStationLog(String chargingStationName, String message) {
     	String logName = LogManager.generateLogName(chargingStationName);
-    	Path logPath = logDirChargingStationPath.resolve(logName);
+    	Path logPath = logChargingStationDirPath.resolve(logName);
     	
     	if(!Files.exists(logPath)) {
     		try {
@@ -79,7 +79,7 @@ public class DataExchange {
     }
     
     private void readChargingStationLog(String logName) throws IOException {
-    	Path logPath = logDirChargingStationPath.resolve(logName);
+    	Path logPath = logChargingStationDirPath.resolve(logName);
     	
     	if(!Files.exists(logPath)) {
     		throw new FileNotFoundException(logName + " was not found!");

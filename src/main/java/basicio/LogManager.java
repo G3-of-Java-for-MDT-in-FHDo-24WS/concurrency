@@ -18,33 +18,33 @@ public class LogManager {
     }
 
     private static final Dotenv dotenv = Dotenv.load();
-    private final Path LOG_DIR_PATH;
-    private final Path LOG_DIR_ARCHIVE_PATH = Paths.get(dotenv.get("LOG_DIR_ARCHIVE"));
+    private final Path logBaseDirPath;
+    private final Path logArchiveDirPath = Paths.get(dotenv.get("LOG_DIR_ARCHIVE"));
 
     public LogManager(LogType logType) {
         switch (logType) {
             case CHARGING_STATION: {
-                LOG_DIR_PATH = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
+            	logBaseDirPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
                 break;
             }
             case ENERGY_SOURCE: {
-                LOG_DIR_PATH = Paths.get(dotenv.get("LOG_DIR_ENERGY_SOURCE"));
+            	logBaseDirPath = Paths.get(dotenv.get("LOG_DIR_ENERGY_SOURCE"));
                 break;
             }
             case WHOLE_SYSTEM: {
-                LOG_DIR_PATH = Paths.get(dotenv.get("LOG_DIR_WHOLE_SYSTEM"));
+            	logBaseDirPath = Paths.get(dotenv.get("LOG_DIR_WHOLE_SYSTEM"));
                 break;
             }
             case DEFAULT:
             default: {
-                LOG_DIR_PATH = Paths.get(dotenv.get("LOG_DIR_DEFAULT"));
+            	logBaseDirPath = Paths.get(dotenv.get("LOG_DIR_DEFAULT"));
                 break;
             }
         }
 
-        if (!Files.exists(LOG_DIR_PATH) || !Files.isDirectory(LOG_DIR_PATH)) {
+        if (!Files.exists(logBaseDirPath) || !Files.isDirectory(logBaseDirPath)) {
             try {
-				Files.createDirectories(LOG_DIR_PATH);
+				Files.createDirectories(logBaseDirPath);
 				
 				System.out.format("Log manager %s has created!", logType.toString());
 			} catch (IOException e) {
@@ -54,7 +54,7 @@ public class LogManager {
     }
 
     public void createLog(String fileName, String content) throws IOException {
-        Path logFilePath = LOG_DIR_PATH.resolve(fileName);
+        Path logFilePath = logBaseDirPath.resolve(fileName);
 
         try (BufferedWriter writer = Files.newBufferedWriter(logFilePath)) {
             writer.write(content);
@@ -62,7 +62,7 @@ public class LogManager {
     }
     
     public void appendLogContent(String fileName, String content) throws IOException {
-    	Path logFilePath = LOG_DIR_PATH.resolve(fileName);
+    	Path logFilePath = logBaseDirPath.resolve(fileName);
     	
     	if(!Files.exists(logFilePath)) {
     		throw new FileNotFoundException();
@@ -74,7 +74,7 @@ public class LogManager {
     }
 
     public void moveLog(String fileName, String targetDir) throws IOException {
-        Path logFilePath = LOG_DIR_PATH.resolve(fileName);
+        Path logFilePath = logBaseDirPath.resolve(fileName);
         Path targetDirPath = Paths.get(targetDir);
         
         if(!Files.exists(logFilePath)) {
@@ -89,19 +89,19 @@ public class LogManager {
     }
 
     public void deleteLog(String fileName) throws IOException {
-        Path logFilePath = LOG_DIR_PATH.resolve(fileName);
+        Path logFilePath = logBaseDirPath.resolve(fileName);
         
         Files.deleteIfExists(logFilePath);
     }
 
     public void archiveLog(String fileName) throws IOException {
-        Path logFilePath = LOG_DIR_PATH.resolve(fileName);
+        Path logFilePath = logBaseDirPath.resolve(fileName);
         
         if(!Files.exists(logFilePath)) {
         	throw new FileNotFoundException("The log file does not exist!");
         }
         
-        Path archivePath = LOG_DIR_ARCHIVE_PATH;
+        Path archivePath = logArchiveDirPath;
         
         if (!Files.exists(archivePath)) {
             Files.createDirectories(archivePath);
