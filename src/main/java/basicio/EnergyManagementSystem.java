@@ -21,7 +21,7 @@ public class EnergyManagementSystem {
         logManager.archiveLog(logPath);
         
         Path sensorData = DataExchange.sendSensorData("temp_data/sensor.temp");
-        DataExchange.receiveSensorData(sensorData.getFileName().toString());
+        DataExchange.receiveSensorData(sensorData.toString());
         
         Path chargingStationLogPath = DataExchange.wirteChargingStationLog(equipmentName, "Charging session started.\n");
         DataExchange.readChargingStationLog(chargingStationLogPath);

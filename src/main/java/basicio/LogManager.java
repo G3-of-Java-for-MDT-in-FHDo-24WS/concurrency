@@ -57,9 +57,10 @@ public class LogManager {
     }
 
     public void moveLog(Path logPath, Path targetDirPath) throws IOException {
-        Path logFilePath = logDirPath.resolve(logPath);
         
-        if(!Files.exists(logFilePath)) {
+        System.out.println(logPath);
+        
+        if(!Files.exists(logPath)) {
         	throw new FileNotFoundException("The log file does not exist!");
         }
 
@@ -67,19 +68,17 @@ public class LogManager {
             Files.createDirectories(targetDirPath);
         }
         
-        Files.move(logFilePath, targetDirPath.resolve(logPath), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(logPath, targetDirPath.resolve(logPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
     }
 
     public void deleteLog(Path logPath) throws IOException {
-        Path logFilePath = logDirPath.resolve(logPath);
         
-        Files.deleteIfExists(logFilePath);
+        Files.deleteIfExists(logPath);
     }
 
-    public void archiveLog(Path logPath) throws IOException {
-        Path logFilePath = logDirPath.resolve(logPath);
+    public void archiveLog(Path logPath) throws IOException {;
         
-        if(!Files.exists(logFilePath)) {
+        if(!Files.exists(logPath)) {
         	throw new FileNotFoundException("The log file does not exist!");
         }
         
@@ -89,7 +88,7 @@ public class LogManager {
             Files.createDirectories(archivePath);
         }
         
-        Files.move(logFilePath, archivePath.resolve(logPath), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(logPath, archivePath.resolve(logPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static String generateLogName(String equipmentName) {

@@ -20,6 +20,15 @@ public class DataExchange {
     public static Path sendSensorData(String targetFile) {
     	Path targetPath = Paths.get(targetFile);
     	
+    	if(!Files.exists(targetPath.getParent())) {
+    		try {
+				Files.createDirectories(targetPath.getParent());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(targetPath))) {
             byte[] sensorData = generateSensorData(256);
             out.write(sensorData);
@@ -32,20 +41,20 @@ public class DataExchange {
     }
     
     public static void receiveSensorData(String sourceFile) throws IOException {
-    	Path sourcePath = Paths.get(sourceFile);
+    	Path sourceFilePath = Paths.get(sourceFile);
     	
-    	if(!Files.exists(sourcePath)) {
+    	if(!Files.exists(sourceFilePath)) {
     		throw new FileNotFoundException("The source file was not found!");
     	}
     	
-    	if(!Files.isRegularFile(sourcePath)) {
+    	if(!Files.isRegularFile(sourceFilePath)) {
     		throw new IOException("The source file is not a regular file!");
     	}
     	
-        try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(sourcePath))) {
+        try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(sourceFilePath))) {
             byte[] receivedData = in.readAllBytes();
             processSensorData(receivedData);
-            System.out.println("Sensor data received from " + sourcePath.getFileName());
+            System.out.println("Sensor data received from " + sourceFilePath.getFileName());
         }
     }
 	
