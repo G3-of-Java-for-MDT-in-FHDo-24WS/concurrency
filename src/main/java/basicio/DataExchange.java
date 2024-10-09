@@ -3,13 +3,11 @@ package basicio;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import basicio.LogManager.LogType;
@@ -58,27 +56,11 @@ public class DataExchange {
     }
     
     
-    private void wirteChargingStationLog(String chargingStationName, String message) {
-    	String logName = LogManager.generateLogName(chargingStationName);
-    	Path logPath = logChargingStationDirPath.resolve(logName);
-    	
-    	if(!Files.exists(logPath)) {
-    		try {
-				chargingStationLogManager.createLog(chargingStationName, message);
-			} catch (IOException e) {
-				System.err.format("Error during creating %s!%n", logName);
-			}
-    	} else {
-    		try(BufferedWriter writer = Files.newBufferedWriter(logPath, StandardOpenOption.APPEND)) {
-    			writer.write(message);
-    			
-    		} catch (IOException e) {
-    			System.err.format("Error during adding content to %s!%n", logName);
-			}
-    	}
+    public void wirteChargingStationLog(String chargingStationName, String message) {
+		chargingStationLogManager.addContentToLog(chargingStationName, message);
     }
     
-    private void readChargingStationLog(String logName) throws IOException {
+    public void readChargingStationLog(String logName) throws IOException {
     	Path logPath = logChargingStationDirPath.resolve(logName);
     	
     	if(!Files.exists(logPath)) {

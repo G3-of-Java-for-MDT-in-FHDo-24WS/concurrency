@@ -54,24 +54,14 @@ public class LogManager {
         }
     }
 
-    public void createLog(String fileName, String content) throws IOException {
+    public void addContentToLog(String fileName, String content) {
         Path logFilePath = logDirPath.resolve(fileName);
 
         try (BufferedWriter writer = Files.newBufferedWriter(logFilePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(content);
+        } catch (IOException e) {
+        	System.err.format("Error during adding content to %s: %s", fileName, e.getMessage());
         }
-    }
-    
-    public void appendLogContent(String fileName, String content) throws IOException {
-    	Path logFilePath = logDirPath.resolve(fileName);
-    	
-    	if(!Files.exists(logFilePath)) {
-    		throw new FileNotFoundException();
-    	}
-    	
-    	try(BufferedWriter writer = Files.newBufferedWriter(logFilePath, StandardOpenOption.CREATE )){
-    		writer.write(content);
-    	}
     }
 
     public void moveLog(String fileName, String targetDir) throws IOException {
