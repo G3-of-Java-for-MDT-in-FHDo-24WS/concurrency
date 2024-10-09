@@ -15,8 +15,6 @@ import basicio.LogManager.LogType;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class DataExchange {
-    private static final Dotenv dotenv = Dotenv.load();
-	private final static Path logChargingStationDirPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
 	private final static LogManager chargingStationLogManager = new LogManager(LogType.CHARGING_STATION);
 	
     public static Path sendSensorData(String targetFile) {
