@@ -42,19 +42,22 @@ public class LogManager {
         }
     }
 
-    public void addContentToLog(String fileName, String content) {
-        Path logFilePath = logDirPath.resolve(fileName);
+    public Path addContentToLog(String equipmentName, String content) {
+    	String logName = generateLogName(equipmentName);
+        Path logFilePath = logDirPath.resolve(logName);
 
         try (BufferedWriter writer = Files.newBufferedWriter(logFilePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(content);
+            return logFilePath;
         } catch (IOException e) {
-        	System.err.format("Error during adding content to %s: %s", fileName, e.getMessage());
-        }
+        	System.err.format("Error during adding content to %s: %s", logName, e.getMessage());
+        } 
+        
+        return logFilePath;
     }
 
-    public void moveLog(String fileName, String targetDir) throws IOException {
-        Path logFilePath = logDirPath.resolve(fileName);
-        Path targetDirPath = Paths.get(targetDir);
+    public void moveLog(Path logPath, Path targetDirPath) throws IOException {
+        Path logFilePath = logDirPath.resolve(logPath);
         
         if(!Files.exists(logFilePath)) {
         	throw new FileNotFoundException("The log file does not exist!");
@@ -64,17 +67,17 @@ public class LogManager {
             Files.createDirectories(targetDirPath);
         }
         
-        Files.move(logFilePath, targetDirPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(logFilePath, targetDirPath.resolve(logPath), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public void deleteLog(String fileName) throws IOException {
-        Path logFilePath = logDirPath.resolve(fileName);
+    public void deleteLog(Path logPath) throws IOException {
+        Path logFilePath = logDirPath.resolve(logPath);
         
         Files.deleteIfExists(logFilePath);
     }
 
-    public void archiveLog(String fileName) throws IOException {
-        Path logFilePath = logDirPath.resolve(fileName);
+    public void archiveLog(Path logPath) throws IOException {
+        Path logFilePath = logDirPath.resolve(logPath);
         
         if(!Files.exists(logFilePath)) {
         	throw new FileNotFoundException("The log file does not exist!");
@@ -86,7 +89,7 @@ public class LogManager {
             Files.createDirectories(archivePath);
         }
         
-        Files.move(logFilePath, archivePath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(logFilePath, archivePath.resolve(logPath), StandardCopyOption.REPLACE_EXISTING);
     }
 
     public static String generateLogName(String equipmentName) {

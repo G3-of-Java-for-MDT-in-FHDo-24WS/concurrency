@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import basicio.LogManager.LogType;
@@ -18,17 +19,23 @@ public class DataExchange {
 	private final static Path logChargingStationDirPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
 	private final static LogManager chargingStationLogManager = new LogManager(LogType.CHARGING_STATION);
 	
-    public void sendSensorData(Path targetPath) {
+    public static Path sendSensorData(String targetFile) {
+    	Path targetPath = Paths.get(targetFile);
+    	
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(targetPath))) {
             byte[] sensorData = generateSensorData(256);
             out.write(sensorData);
             System.out.println("Sensor data sent to " + targetPath.getFileName());
         } catch (IOException e) {
         	System.err.println("Error during sending sensor data: " + e.getMessage());
-        }
+        } 
+        
+        return targetPath;
     }
     
-    public void receiveSensorData(Path sourcePath) throws IOException {
+    public static void receiveSensorData(String sourceFile) throws IOException {
+    	Path sourcePath = Paths.get(sourceFile);
+    	
     	if(!Files.exists(sourcePath)) {
     		throw new FileNotFoundException("The source file was not found!");
     	}
@@ -45,30 +52,29 @@ public class DataExchange {
     }
 	
 	
-    private byte[] generateSensorData(int length) {
+    private static byte[] generateSensorData(int length) {
         byte[] data = new byte[length]; 
         new Random().nextBytes(data);
         return data;
     }
 
-    private void processSensorData(byte[] data) {
+    private static void processSensorData(byte[] data) {
         System.out.println("Processing sensor data of size: " + data.length + " bytes");
     }
     
     
-    public void wirteChargingStationLog(String chargingStationName, String message) {
-		chargingStationLogManager.addContentToLog(chargingStationName, message);
+    public static Path wirteChargingStationLog(String chargingStationName, String message) {
+    	String logName = LogManager.generateLogName(chargingStationName);
+		return chargingStationLogManager.addContentToLog(logName, message);
     }
     
-    public void readChargingStationLog(String logName) throws IOException {
-    	Path logPath = logChargingStationDirPath.resolve(logName);
-    	
+    public static void readChargingStationLog(Path logPath) throws IOException {
     	if(!Files.exists(logPath)) {
-    		throw new FileNotFoundException(logName + " was not found!");
+    		throw new FileNotFoundException(logPath + " was not found!");
     	}
     	
     	if(!Files.isRegularFile(logPath)) {
-    		throw new IOException(logName + " is not a regular file!");
+    		throw new IOException(logPath + " is not a regular file!");
     	}
     	
         try (BufferedReader reader = Files.newBufferedReader(logPath)) {
@@ -77,7 +83,7 @@ public class DataExchange {
         		System.out.println(line);
         	}
         } catch(IOException e) {
-        	System.err.format("Error during reading %s!%n", logName);
+        	System.err.format("Error during reading %s!%n", logPath.getFileName());
         }
     }
 	
