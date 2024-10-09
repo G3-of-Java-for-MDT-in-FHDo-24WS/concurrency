@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -14,34 +15,23 @@ public class LogManager {
         CHARGING_STATION,
         ENERGY_SOURCE,
         WHOLE_SYSTEM,
-        DEFAULT
+        DEFAULT,
+        ARCHIVE
     }
 
     private static final Dotenv dotenv = Dotenv.load();
     private final Path logDirPath;
-    private final static Path logArchiveDirPath = Paths.get(dotenv.get("LOG_DIR_ARCHIVE"));
+    
+    private final static Map<LogType, String> logTypeDirMap = Map.of(
+    		LogType.CHARGING_STATION, dotenv.get("LOG_DIR_CHARGING_STATION"),
+    		LogType.ENERGY_SOURCE, dotenv.get("LOG_DIR_CHARGING_STATION"),
+    		LogType.WHOLE_SYSTEM, dotenv.get("LOG_DIR_CHARGING_STATION"),
+    		LogType.DEFAULT, dotenv.get("LOG_DIR_CHARGING_STATION"),
+    		LogType.ARCHIVE, dotenv.get("LOG_DIR_ARCHIVE"));
     
 
     public LogManager(LogType logType) {
-        switch (logType) {
-            case CHARGING_STATION: {
-            	logDirPath = Paths.get(dotenv.get("LOG_DIR_CHARGING_STATION"));
-                break;
-            }
-            case ENERGY_SOURCE: {
-            	logDirPath = Paths.get(dotenv.get("LOG_DIR_ENERGY_SOURCE"));
-                break;
-            }
-            case WHOLE_SYSTEM: {
-            	logDirPath = Paths.get(dotenv.get("LOG_DIR_WHOLE_SYSTEM"));
-                break;
-            }
-            case DEFAULT:
-            default: {
-            	logDirPath = Paths.get(dotenv.get("LOG_DIR_DEFAULT"));
-                break;
-            }
-        }
+    	logDirPath = Paths.get(logTypeDirMap.get(logType));
 
         if (!Files.exists(logDirPath) || !Files.isDirectory(logDirPath)) {
             try {
@@ -92,7 +82,7 @@ public class LogManager {
         	throw new FileNotFoundException("The log file does not exist!");
         }
         
-        Path archivePath = logArchiveDirPath;
+        Path archivePath = Paths.get(logTypeDirMap.get(LogType.ARCHIVE));
         
         if (!Files.exists(archivePath)) {
             Files.createDirectories(archivePath);
