@@ -11,6 +11,7 @@ import java.util.Map;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class LogManager {
+	private static final Dotenv dotenv = Dotenv.load();
     public static enum LogType {
         CHARGING_STATION,
         ENERGY_SOURCE,
@@ -18,17 +19,14 @@ public class LogManager {
         DEFAULT,
         ARCHIVE
     }
-
-    private static final Dotenv dotenv = Dotenv.load();
-    private final Path logDirPath;
-    
-    private final static Map<LogType, String> logTypeDirMap = Map.of(
+    public final static Map<LogType, String> logTypeDirMap = Map.of(
     		LogType.CHARGING_STATION, dotenv.get("LOG_DIR_CHARGING_STATION"),
     		LogType.ENERGY_SOURCE, dotenv.get("LOG_DIR_CHARGING_STATION"),
     		LogType.WHOLE_SYSTEM, dotenv.get("LOG_DIR_CHARGING_STATION"),
     		LogType.DEFAULT, dotenv.get("LOG_DIR_CHARGING_STATION"),
     		LogType.ARCHIVE, dotenv.get("LOG_DIR_ARCHIVE"));
     
+    private final Path logDirPath;
 
     public LogManager(LogType logType) {
     	logDirPath = Paths.get(logTypeDirMap.get(logType));
