@@ -3,9 +3,9 @@
 ## Role Distribution and Screencast Link
 <!-- TODO -->
 - Yanal Al Halabi, 7221683, my role was to create the basic file management and maintain the main application.
-  - ([link](https://drive.google.com/file/d/1G4m8ErQxRVD3iQjGR3B8emTbwOyRQvDt/view?usp=sharing))
-- Linxin Zhang, 7221539
-  - (link)
+  - [Screencast Link](https://drive.google.com/file/d/1G4m8ErQxRVD3iQjGR3B8emTbwOyRQvDt/view?usp=sharing)
+- Linxin Zhang, 7221539, I`m in charge of the Data Exchange simulation, Log Searching and other chores.
+  - [Screencast Link](https://drive.google.com/file/d/1yIeP5SPqK4Xw5AjyroBSRWHwUWUqFXUa/view?usp=sharing)
 - Franklin Viegas
 - Anjali Bodke
 
