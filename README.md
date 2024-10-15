@@ -6,8 +6,8 @@
   - [Screencast Link](https://drive.google.com/file/d/1G4m8ErQxRVD3iQjGR3B8emTbwOyRQvDt/view?usp=sharing)
 - Linxin Zhang, 7221539, I`m in charge of the Data Exchange simulation, Log Searching and other chores.
   - [Screencast Link](https://drive.google.com/file/d/1yIeP5SPqK4Xw5AjyroBSRWHwUWUqFXUa/view?usp=sharing)
-- Franklin Viegas
-- Anjali Bodke
+- Franklin Viegas, 7222134, my role was associated with Log manager - as I was preparing to fly during the deadline(9.10.24) - Linxin Combined and committed.
+- Anjali Bodke, 7222106, my role was associated with Log manager - as I was preparing to fly during the deadline(9.10.24) - Linxin Combined and committed.
 
 ## Screenshots of some fragments
 Running the project we get a success message!
