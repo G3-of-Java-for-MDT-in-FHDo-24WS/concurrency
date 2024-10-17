@@ -54,7 +54,8 @@ public class LogSearchService {
                 System.out.println(line);
             }
         } catch (IOException e) {
-            throw new CustomExceptionHandler.LogException(e.getMessage(), e);
+            String customExceptionMessage = String.format("There is a Exception when read the content of log: %s", file.getName());
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
         }
     }
 }

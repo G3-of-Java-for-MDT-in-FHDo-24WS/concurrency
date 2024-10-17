@@ -52,15 +52,15 @@ public class LogManageService {
         }
     }
 
-    public Path addContentToLog(LogType logType, String equipmentName, String content) throws CustomExceptionHandler.LogException {
+    public void addContentToLog(LogType logType, String equipmentName, String content) throws CustomExceptionHandler.LogException {
         String logName = generateLogName(equipmentName);
         Path logFilePath = Paths.get(logTypeDirMap.get(logType)).resolve(logName);
 
         try (BufferedWriter writer = Files.newBufferedWriter(logFilePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(content);
-            return logFilePath;
         } catch (IOException e) {
-            throw new CustomExceptionHandler.LogException(e.getMessage(), e);
+            String customExceptionMessage = String.format("There is a Exception when adding content to log: %s \nAnd content is: %s", logFilePath.getFileName(), content);
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
         }
     }
 
