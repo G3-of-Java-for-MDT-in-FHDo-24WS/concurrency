@@ -2,6 +2,7 @@ package de.fhdo.smart_house.service;
 
 import de.fhdo.smart_house.config.CustomProperties;
 import de.fhdo.smart_house.util.CustomExceptionHandler;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
