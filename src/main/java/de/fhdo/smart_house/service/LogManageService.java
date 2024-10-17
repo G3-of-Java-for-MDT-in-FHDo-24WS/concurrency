@@ -1,6 +1,7 @@
 package de.fhdo.smart_house.service;
 
 import de.fhdo.smart_house.config.CustomProperties;
+import de.fhdo.smart_house.util.CustomExceptionHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -51,7 +52,7 @@ public class LogManageService {
         }
     }
 
-    public Path addContentToLog(LogType logType, String equipmentName, String content) {
+    public Path addContentToLog(LogType logType, String equipmentName, String content) throws CustomExceptionHandler.LogException {
         String logName = generateLogName(equipmentName);
         Path logFilePath = Paths.get(logTypeDirMap.get(logType)).resolve(logName);
 
@@ -59,10 +60,8 @@ public class LogManageService {
             writer.write(content);
             return logFilePath;
         } catch (IOException e) {
-            System.err.format("Error during adding content to %s: %s", logName, e.getMessage());
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e);
         }
-
-        return logFilePath;
     }
 
     public void moveLog(Path logPath, Path targetDirPath) throws IOException {
@@ -86,8 +85,6 @@ public class LogManageService {
     }
 
     public void archiveLog(Path logPath) throws IOException {
-        ;
-
         if (!Files.exists(logPath)) {
             throw new FileNotFoundException("The log file does not exist!");
         }

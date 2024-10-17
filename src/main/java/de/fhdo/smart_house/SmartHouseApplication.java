@@ -3,6 +3,7 @@ package de.fhdo.smart_house;
 import de.fhdo.smart_house.config.CustomProperties;
 import de.fhdo.smart_house.service.LogManageService;
 import de.fhdo.smart_house.service.LogSearchService;
+import de.fhdo.smart_house.util.CustomExceptionHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +22,7 @@ public class SmartHouseApplication {
 	}
 
 	@PostConstruct
-	void init() {
+	void init() throws CustomExceptionHandler.LogException {
 		logManageService.addContentToLog(LogManageService.LogType.DEFAULT, "test", "content");
 	}
 

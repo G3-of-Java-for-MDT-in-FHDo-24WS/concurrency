@@ -8,6 +8,7 @@ import java.util.regex.*;
 
 import de.fhdo.smart_house.service.LogManageService.LogType;
 import de.fhdo.smart_house.config.CustomProperties;
+import de.fhdo.smart_house.util.CustomExceptionHandler;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +19,7 @@ public class LogSearchService {
         this.customProperties = customProperties;
     }
 
-    public void searchLogByPattern(String logDirectory, String pattern) throws IOException {
+    public void searchLogByPattern(String logDirectory, String pattern) throws CustomExceptionHandler.LogException {
         File dir = new File(logDirectory);
         File[] files = dir.listFiles();
         Pattern regex = Pattern.compile(pattern);
@@ -31,26 +32,29 @@ public class LogSearchService {
             }
         }
     }
-    
+
     // TODO To be complete
     public List<Path> searchLogListByPattern(String pattern) {
-    	List<Path> pathList = new ArrayList<>();
+        List<Path> pathList = new ArrayList<>();
 
-    	return pathList;
+        return pathList;
     }
-    
+
     // TODO To be complete
     public List<Path> searchLogListByPattern(String pattern, LogType logType) {
-    	List<Path> pathList = new ArrayList<>();
-    	return pathList;
+        List<Path> pathList = new ArrayList<>();
+        return pathList;
     }
 
-    private void displayLog(File file) throws IOException {
+
+    private void displayLog(File file) throws CustomExceptionHandler.LogException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
+        } catch (IOException e) {
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e);
         }
     }
 }
