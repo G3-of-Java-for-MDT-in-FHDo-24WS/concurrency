@@ -15,7 +15,19 @@ public class CustomExceptionHandler {
         }
     }
 
-    public static void LogHandler(LogException e) {
-        System.err.format("LogException here: %s", e.getCustomMessage());
+    public static class LogHandler extends Handler {
+        public LogHandler(String msg) {
+            this.customMessage = msg;
+        }
+
+        @Override
+        public void handle() {
+            System.out.println(this.customMessage);
+        }
     }
+}
+
+abstract class Handler {
+    String customMessage;
+    abstract void handle();
 }

@@ -36,10 +36,15 @@ public class LogManageService {
                 LogType.DEFAULT, this.logDir.getDefaultDir(),
                 LogType.ARCHIVE, this.logDir.getArchive());
 
-        this.init();
+        try {
+            this.init();
+        } catch (CustomExceptionHandler.LogException logException) {
+            new CustomExceptionHandler.LogHandler(logException.getCustomMessage()).handle();
+        }
+
     }
 
-    private void init() {
+    private void init() throws CustomExceptionHandler.LogException {
         for (Map.Entry<LogType, String> entry : logTypeDirMap.entrySet()) {
             Path path = Paths.get(entry.getValue());
             try {
@@ -47,7 +52,8 @@ public class LogManageService {
                     Files.createDirectories(path);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                String customExceptionMessage = "There is a Exception when creating log directories at the init phase of LogManageService";
+                throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
             }
         }
     }
@@ -61,31 +67,42 @@ public class LogManageService {
         } catch (IOException e) {
             String customExceptionMessage = String.format("There is a Exception when adding content to log: %s \nAnd content is: %s", logFilePath.getFileName(), content);
 
-            CustomExceptionHandler.LogException logException = new  CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
-            CustomExceptionHandler.LogHandler(logException);
-
-            throw logException;
+            throw new  CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
         }
     }
 
-    public void moveLog(Path logPath, Path targetDirPath) throws IOException {
-
-        System.out.println(logPath);
+    public void moveLog(Path logPath, Path targetDirPath) throws CustomExceptionHandler.LogException, FileNotFoundException {
 
         if (!Files.exists(logPath)) {
             throw new FileNotFoundException("The log file does not exist!");
         }
 
         if (!Files.exists(targetDirPath)) {
-            Files.createDirectories(targetDirPath);
+            try {
+                Files.createDirectories(targetDirPath);
+            } catch (IOException e) {
+                String customExceptionMessage = String.format("There is a Exception when creating log directory before the moving of log, the target directory is: %s", targetDirPath);
+                throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
+            }
         }
 
-        Files.move(logPath, targetDirPath.resolve(logPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.move(logPath, targetDirPath.resolve(logPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            String customExceptionMessage = String.format("There is a Exception when moving log: %s\nAnd the target directory is: %s", logPath.getFileName(), targetDirPath);
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
+        }
+
     }
 
-    public void deleteLog(Path logPath) throws IOException {
+    public void deleteLog(Path logPath) throws CustomExceptionHandler.LogException {
+        try {
+            Files.deleteIfExists(logPath);
+        } catch (IOException e) {
+            String customExceptionMessage = String.format("There is a Exception when deleting the log: %s", logPath.getFileName());
+            throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
+        }
 
-        Files.deleteIfExists(logPath);
     }
 
     public void archiveLog(Path logPath) throws IOException {
@@ -99,7 +116,12 @@ public class LogManageService {
             Files.createDirectories(archivePath);
         }
 
-        Files.move(logPath, archivePath.resolve(logPath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+        try {
+            this.moveLog(logPath, archivePath);
+        } catch (CustomExceptionHandler.LogException logException) {
+            new CustomExceptionHandler.LogHandler(logException.getCustomMessage()).handle();
+        }
+
     }
 
     public static String generateLogName(String equipmentName) {
