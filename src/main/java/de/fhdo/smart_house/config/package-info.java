@@ -1,0 +1,1 @@
+package de.fhdo.smart_house.config;
