@@ -60,7 +60,11 @@ public class LogManageService {
             writer.write(content);
         } catch (IOException e) {
             String customExceptionMessage = String.format("There is a Exception when adding content to log: %s \nAnd content is: %s", logFilePath.getFileName(), content);
-            throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
+
+            CustomExceptionHandler.LogException logException = new  CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
+            CustomExceptionHandler.LogHandler(logException);
+
+            throw logException;
         }
     }
 
