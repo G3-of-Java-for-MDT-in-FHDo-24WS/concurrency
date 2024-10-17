@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.*;
 
-import basicio.LogManager.LogType;
+import de.fhdo.smart_house.service.LogManageService.LogType;
 import de.fhdo.smart_house.config.CustomProperties;
 import org.springframework.stereotype.Component;
 

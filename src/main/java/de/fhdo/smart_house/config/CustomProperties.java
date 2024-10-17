@@ -12,7 +12,7 @@ public class CustomProperties {
 	private LogDir logDir = new LogDir();
 
 	@Data
-	private static class LogDir {
+	public static class LogDir {
 		private String base;
 		private String chargingStation;
 		private String energySource;
