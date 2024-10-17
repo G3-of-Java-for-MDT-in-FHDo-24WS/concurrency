@@ -1,4 +1,4 @@
-package basicio;
+package de.fhdo.smart_house.service;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -8,7 +8,7 @@ import java.util.regex.*;
 
 import basicio.LogManager.LogType;
 
-public class LogSearcher {
+public class LogSearchService {
     public void searchLogByPattern(String logDirectory, String pattern) throws IOException {
         File dir = new File(logDirectory);
         File[] files = dir.listFiles();
