@@ -1,14 +1,16 @@
 package de.fhdo.smart_house.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "custom")
 @Data
 public class CustomProperties {
+	private LogDir logDir = new LogDir();
+
 	@Data
 	private static class LogDir {
 		private String base;
@@ -16,6 +18,6 @@ public class CustomProperties {
 		private String energySource;
 		private String system;
 		private String archive;
-		private String _default;
+		private String defaultDir;
 	}
 }

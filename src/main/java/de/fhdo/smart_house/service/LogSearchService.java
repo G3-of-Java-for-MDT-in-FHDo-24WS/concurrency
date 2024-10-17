@@ -7,8 +7,17 @@ import java.util.List;
 import java.util.regex.*;
 
 import basicio.LogManager.LogType;
+import de.fhdo.smart_house.config.CustomProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LogSearchService {
+    private final CustomProperties customProperties;
+
+    public LogSearchService(CustomProperties customProperties) {
+        this.customProperties = customProperties;
+    }
+
     public void searchLogByPattern(String logDirectory, String pattern) throws IOException {
         File dir = new File(logDirectory);
         File[] files = dir.listFiles();
@@ -26,6 +35,7 @@ public class LogSearchService {
     // TODO To be complete
     public List<Path> searchLogListByPattern(String pattern) {
     	List<Path> pathList = new ArrayList<>();
+
     	return pathList;
     }
     
