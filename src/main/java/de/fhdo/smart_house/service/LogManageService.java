@@ -14,8 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
+@Data
 public class LogManageService {
-    private final CustomProperties.LogDir logDir;
+    private final CustomProperties customProperties;
 
     public enum LogType {
         CHARGING_STATION,
@@ -25,17 +26,17 @@ public class LogManageService {
         ARCHIVE
     }
 
-    public final Map<LogType, String> logTypeDirMap;
+    private final Map<LogType, String> logTypeDirMap;
 
     LogManageService(CustomProperties customProperties) {
-        this.logDir = customProperties.getLogDir();
+        this.customProperties = customProperties;
 
         logTypeDirMap = Map.of(
-                LogType.CHARGING_STATION, this.logDir.getChargingStation(),
-                LogType.ENERGY_SOURCE, this.logDir.getEnergySource(),
-                LogType.SYSTEM, this.logDir.getSystem(),
-                LogType.DEFAULT, this.logDir.getDefaultDir(),
-                LogType.ARCHIVE, this.logDir.getArchive());
+                LogType.CHARGING_STATION, this.customProperties.getLogDir().getChargingStation(),
+                LogType.ENERGY_SOURCE, this.customProperties.getLogDir().getEnergySource(),
+                LogType.SYSTEM, this.customProperties.getLogDir().getSystem(),
+                LogType.DEFAULT, this.customProperties.getLogDir().getDefaultDir(),
+                LogType.ARCHIVE, this.customProperties.getLogDir().getArchive());
 
         try {
             this.init();

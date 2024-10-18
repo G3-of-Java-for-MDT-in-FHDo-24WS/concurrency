@@ -11,19 +11,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.IOException;
+
 @SpringBootApplication
 @EnableConfigurationProperties(CustomProperties.class)
 public class SmartHouseApplication {
 	@Autowired
-	private LogManageService logManageService;
+	private LogSearchService logSearchService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmartHouseApplication.class, args);
 	}
 
 	@PostConstruct
-	void init() throws CustomExceptionHandler.LogException {
-		logManageService.addContentToLog(LogManageService.LogType.DEFAULT, "test", "content");
+	void init() throws IOException {
+		System.out.println("yes");
+		logSearchService.searchLogListByPattern(".*");
 	}
-
 }

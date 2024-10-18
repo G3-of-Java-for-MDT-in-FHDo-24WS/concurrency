@@ -1,4 +1,4 @@
-package java.g3.smart_house;
+package de.fhdo.smart_house;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

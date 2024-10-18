@@ -11,16 +11,15 @@ import java.util.stream.Stream;
 
 import de.fhdo.smart_house.service.LogManageService.LogType;
 import de.fhdo.smart_house.config.CustomProperties;
-import de.fhdo.smart_house.util.CustomExceptionHandler;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class LogSearchService {
-    private final CustomProperties.LogDir logDir;
+    private final CustomProperties customProperties;
     private final LogManageService logManageService;
 
     public LogSearchService(CustomProperties customProperties, LogManageService logManageService) {
-        this.logDir = customProperties.getLogDir();
+        this.customProperties = customProperties;
         this.logManageService = logManageService;
     }
 
@@ -28,13 +27,13 @@ public class LogSearchService {
         List<Path> pathList = new ArrayList<>();
         Pattern regex = Pattern.compile(pattern);
 
-        Path logBaseDirPath = Paths.get(logDir.getBase());
+        Path logBaseDirPath = Paths.get(customProperties.getLogDir().getBase());
 
         System.out.println("Searching, please wait.....");
 
         try (Stream<Path> paths = Files.walk(logBaseDirPath)) {
             paths.filter(Files::isRegularFile).forEach(path -> {
-                Matcher matcher = regex.matcher((CharSequence) path.getFileName());
+                Matcher matcher = regex.matcher(path.getFileName().toString());
 
                 if(matcher.find()) {
                     pathList.add(path);
@@ -49,11 +48,11 @@ public class LogSearchService {
         List<Path> pathList = new ArrayList<>();
         Pattern regex = Pattern.compile(pattern);
 
-        Path logTargetDirPath = Paths.get(logManageService.logTypeDirMap.get(logType));
+        Path logTargetDirPath = Paths.get(logManageService.getLogTypeDirMap().get(logType));
 
         try (Stream<Path> paths = Files.list(logTargetDirPath)) {
             paths.filter(Files::isRegularFile).forEach(path -> {
-                Matcher matcher = regex.matcher((CharSequence) path.getFileName());
+                Matcher matcher = regex.matcher(path.getFileName().toString());
 
                 if(matcher.find()) {
                     pathList.add(path);

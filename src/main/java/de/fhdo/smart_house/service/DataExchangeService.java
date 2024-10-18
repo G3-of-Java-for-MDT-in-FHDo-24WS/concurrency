@@ -12,8 +12,10 @@ import java.util.Random;
 
 import de.fhdo.smart_house.util.CustomExceptionHandler;
 import lombok.Data;
+import org.springframework.stereotype.Service;
 
 @Data
+@Service
 public class DataExchangeService {
     private LogManageService logManageService;
 
