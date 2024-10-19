@@ -99,13 +99,16 @@ public class LogManageService {
     }
 
     public void deleteLog(Path logPath) throws CustomExceptionHandler.LogException {
+        if (!Files.exists(logPath)) {
+            throw new CustomExceptionHandler.LogException("The log file does not exist!", null, "Log file not found: " + logPath.getFileName());
+        }
+
         try {
-            Files.deleteIfExists(logPath);
+            Files.delete(logPath);
         } catch (IOException e) {
             String customExceptionMessage = String.format("There is a Exception when deleting the log: %s", logPath.getFileName());
             throw new CustomExceptionHandler.LogException(e.getMessage(), e, customExceptionMessage);
         }
-
     }
 
     public void archiveLog(Path logPath) throws IOException {

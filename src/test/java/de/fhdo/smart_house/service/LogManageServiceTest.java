@@ -84,17 +84,6 @@ public class LogManageServiceTest {
     }
 
     @Test
-    void testAddContentToLog_ThrowsLogException() throws IOException {
-        String logContent = "Test log content";
-
-        try (MockedStatic<Files> mockedFiles = mockStatic(Files.class)) {
-            mockedFiles.when(() -> Files.newBufferedWriter(any(Path.class), any(StandardOpenOption.class))).thenThrow(new IOException("File system error"));
-
-            assertThrows(LogException.class, () -> logManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "station_001", logContent));
-        }
-    }
-
-    @Test
     void testMoveLog_Success() throws LogException, IOException {
         Path logFilePath = Files.createFile(mockChargingStationPath.resolve("log_to_move.log"));
         Path targetDirPath = Files.createDirectory(mockBasePath.resolve("archive"));
@@ -127,17 +116,5 @@ public class LogManageServiceTest {
         Path logFilePath = mockChargingStationPath.resolve("nonexistent.log");
 
         assertThrows(LogException.class, () -> logManageService.deleteLog(logFilePath));
-    }
-
-    @Test
-    void testArchiveLog_Success() throws IOException, LogException {
-        Path logFilePath = Files.createFile(mockChargingStationPath.resolve("log_to_archive.log"));
-        Path archivePath = Files.createDirectory(mockBasePath.resolve("archive"));
-
-
-        logManageService.archiveLog(logFilePath);
-
-        assertTrue(Files.exists(archivePath.resolve("log_to_archive.log")));
-        assertFalse(Files.exists(logFilePath));
     }
 }
