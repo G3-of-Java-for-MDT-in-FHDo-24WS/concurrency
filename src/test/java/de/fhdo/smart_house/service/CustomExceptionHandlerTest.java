@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-class CustomExceptionHandlerTest {
+public class CustomExceptionHandlerTest {
 
     @Test
     void testHandleSingleException() {
