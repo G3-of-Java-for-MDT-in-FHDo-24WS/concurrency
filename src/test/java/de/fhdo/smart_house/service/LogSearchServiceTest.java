@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,17 +23,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LogSearchServiceTest {
 
-    @Mock
-    private CustomProperties mockCustomProperties;
-
-    @Mock
-    private LogManageService mockLogManageService;
-
-    @InjectMocks
-    private LogSearchService mockLogSearchService;
-    
-    private CustomProperties.LogDir logDir;
-
+    private CustomProperties customProperties;
+    private LogManageService logManageService;
+    private LogSearchService logSearchService;
     private Path mockBasePath;
     private Path mockChargingStationPath;
 
@@ -42,23 +33,28 @@ public class LogSearchServiceTest {
         mockBasePath = Files.createTempDirectory("mock_logs");
         mockChargingStationPath = Files.createDirectory(mockBasePath.resolve("charging_station"));
 
-        logDir = new CustomProperties.LogDir();
+        customProperties = new CustomProperties();
+        CustomProperties.LogDir logDir = new CustomProperties.LogDir();
+        
         logDir.setChargingStation(mockChargingStationPath.toString());
-        logDir.setBase(mockBasePath.toString());        
+        logDir.setBase(mockBasePath.toString());
+        logDir.setArchive(mockBasePath.toString());
+        logDir.setDefaultDir(mockBasePath.toString());
+        logDir.setEnergySource(mockBasePath.toString());
+        logDir.setSystem(mockBasePath.toString());
+        customProperties.setLogDir(logDir);
     }
 
     @BeforeEach
     void setUp() throws IOException, LogException {
         setupCommonMocks();
 
-        lenient().when(mockCustomProperties.getLogDir()).thenReturn(logDir);
-        lenient().when(mockLogManageService.getLogTypeDirMap()).thenReturn(Map.of(
-                LogManageService.LogType.CHARGING_STATION, logDir.getChargingStation()
-        ));
+        logManageService = new LogManageService(customProperties);
+        logSearchService = new LogSearchService(customProperties, logManageService);
         
-//        mockLogManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0001", "charging_station_0001 log for testing!");
-//        mockLogManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0002", "charging_station_0002 log for testing!");
-//        mockLogManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0003", "charging_station_0003 log for testing!");
+        logManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0001", "charging_station_0001 log for testing!");
+        logManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0002", "charging_station_0002 log for testing!");
+        logManageService.addContentToLog(LogManageService.LogType.CHARGING_STATION, "charging_station_0003", "charging_station_0003 log for testing!");
     }
 
     private void deleteDirectory(Path directoryPath) throws IOException {
@@ -83,8 +79,8 @@ public class LogSearchServiceTest {
 
     @Test
     void testSearchLogListByPattern_ValidPattern() throws IOException {
-        List<Path> result1 = mockLogSearchService.searchLogListByPattern("charging_station_01");
-        List<Path> result2 = mockLogSearchService.searchLogListByPattern("2024-10");
+        List<Path> result1 = logSearchService.searchLogListByPattern("charging_station");
+        List<Path> result2 = logSearchService.searchLogListByPattern("2024-10");
         
 
         assertTrue(!result1.isEmpty());
@@ -93,15 +89,15 @@ public class LogSearchServiceTest {
 
     @Test
     void testSearchLogListByPattern_NoMatches() throws IOException {
-        List<Path> result = mockLogSearchService.searchLogListByPattern("nonexistent");
+        List<Path> result = logSearchService.searchLogListByPattern("nonexistent");
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void testSearchLogListByPatternWithLogType_ValidPattern() throws IOException {
-        List<Path> result1 = mockLogSearchService.searchLogListByPattern("charging_station_01", LogManageService.LogType.CHARGING_STATION);
-        List<Path> result2 = mockLogSearchService.searchLogListByPattern("2024-10", LogManageService.LogType.CHARGING_STATION);
+        List<Path> result1 = logSearchService.searchLogListByPattern("charging_station", LogManageService.LogType.CHARGING_STATION);
+        List<Path> result2 = logSearchService.searchLogListByPattern("2024-10", LogManageService.LogType.CHARGING_STATION);
 
         assertTrue(!result1.isEmpty());
         assertTrue(!result2.isEmpty());
@@ -109,7 +105,7 @@ public class LogSearchServiceTest {
 
     @Test
     void testSearchLogListByPatternWithLogType_NoMatches() throws IOException {
-        List<Path> result = mockLogSearchService.searchLogListByPattern("nonexistent", LogManageService.LogType.CHARGING_STATION);
+        List<Path> result = logSearchService.searchLogListByPattern("nonexistent", LogManageService.LogType.CHARGING_STATION);
 
         assertTrue(result.isEmpty());
     }
@@ -120,7 +116,7 @@ public class LogSearchServiceTest {
             mockedFiles.when(() -> Files.walk(any(Path.class))).thenThrow(new IOException("File system error"));
 
             assertThrows(IOException.class, () -> {
-                mockLogSearchService.searchLogListByPattern(".*");
+            	logSearchService.searchLogListByPattern(".*");
             });
         }
     }

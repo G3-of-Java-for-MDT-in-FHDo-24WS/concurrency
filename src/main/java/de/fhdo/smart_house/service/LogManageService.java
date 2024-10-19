@@ -36,7 +36,8 @@ public class LogManageService {
                 LogType.ENERGY_SOURCE, this.customProperties.getLogDir().getEnergySource(),
                 LogType.SYSTEM, this.customProperties.getLogDir().getSystem(),
                 LogType.DEFAULT, this.customProperties.getLogDir().getDefaultDir(),
-                LogType.ARCHIVE, this.customProperties.getLogDir().getArchive());
+                LogType.ARCHIVE, this.customProperties.getLogDir().getArchive()
+        );
 
         try {
             this.init();
