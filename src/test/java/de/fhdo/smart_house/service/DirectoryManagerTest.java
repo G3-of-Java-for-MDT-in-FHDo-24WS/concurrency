@@ -55,31 +55,23 @@ public class DirectoryManagerTest {
         Path existingDir = tempDir.resolve("existingDir");
         Files.createDirectory(existingDir);
 
-        // Call the method that should handle existing directories gracefully
         directoryManager.createDirectory(existingDir);
 
-        // Verify that the directory still exists
         assertTrue(Files.exists(existingDir), "Directory should still exist");
 
-        // Optionally, verify no new creation attempt (if applicable)
-        // You may mock the behavior if your method calls Files.createDirectories
     }
     
     @Test
     void testCreateDirectory_ThrowsIOException() {
         Path invalidPath = Path.of("/invalid/path");
 
-        // Mock static methods in the Files class
         try (MockedStatic<Files> mockedFiles = mockStatic(Files.class)) {
-            // Set up mock behavior to throw IOException
             mockedFiles.when(() -> Files.createDirectories(invalidPath)).thenThrow(new IOException("Invalid path"));
 
-            // Verify that the exception is thrown
             IOException thrown = assertThrows(IOException.class, () -> {
                 directoryManager.createDirectory(invalidPath);
             });
 
-            // Verify the exception message
             assertEquals("Could not create directory: " + invalidPath.toString(), thrown.getMessage());
         }
     }
@@ -96,21 +88,16 @@ public class DirectoryManagerTest {
     void testCreateDirectory_ThrowsIOExceptionOnCreationFailure() {
         Path mockPath = mock(Path.class);
 
-        // Mock static methods in the Files class
         try (MockedStatic<Files> mockedFiles = mockStatic(Files.class)) {
-            // Set up mock behavior
             when(Files.exists(mockPath)).thenReturn(false);
             mockedFiles.when(() -> Files.createDirectories(mockPath)).thenThrow(new IOException("Creation failed"));
 
-            // Verify that the exception is thrown
             IOException thrown = assertThrows(IOException.class, () -> {
                 directoryManager.createDirectory(mockPath);
             });
 
-            // Verify the exception message
             assertEquals("Could not create directory: " + mockPath.toString(), thrown.getMessage());
 
-            // Verify the static method calls directly
             mockedFiles.verify(() -> Files.exists(mockPath));
             mockedFiles.verify(() -> Files.createDirectories(mockPath));
         }
