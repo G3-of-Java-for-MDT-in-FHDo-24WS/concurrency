@@ -1,8 +1,8 @@
 # HA 02: Exception handling and Unit testing
 
 ## Role Distribution and Screencast Link
-- Yanal Al Halabi, 7221683, [Write role here].
-  - [Screencast Link]()
+- Yanal Al Halabi, 7221683, [added the class for chaining exceptions and created a unit test file for LogManageService].
+  - [[Screencast Link](https://drive.google.com/file/d/1RJaOjAA9Pv3ZJO7bmICs-lWFoPlZE98n/view?usp=sharing)]()
 - Linxin Zhang, 7221539, [Write role here].
   - [Screencast Link]()
 - Franklin Viegas, 7222134, [Write role here].
