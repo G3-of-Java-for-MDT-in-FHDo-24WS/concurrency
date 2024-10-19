@@ -1,4 +1,4 @@
-# basicio_and_regularexpressions
+# HA 02: Exception handling and Unit testing
 
 ## Role Distribution and Screencast Link
 - Yanal Al Halabi, 7221683, [Write role here].
@@ -13,4 +13,4 @@
 ## Screenshots
 
 ## Requirements
-Please refer [requirements.txt](./requirements.txt) or [pom.xml](./pom.xml)
+Please refer [requirements.md](./requirements.md)
