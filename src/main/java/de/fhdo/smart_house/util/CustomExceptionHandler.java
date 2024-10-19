@@ -25,6 +25,20 @@ public class CustomExceptionHandler {
             System.out.println(this.customMessage);
         }
     }
+    // Chaining Exception Handling for Logs
+    public static void chainExceptions(int input) throws LogException {
+        try {
+            validateInput(input); // Might throw LogException
+        } catch (LogException e) {
+            throw new LogException("Input validation failed: " + e.getMessage(), e, "Error in input validation");
+        }
+    }
+
+    private static void validateInput(int input) throws LogException {
+        if (input <= 0) {
+            throw new LogException("Input must be positive", null, "Invalid input: " + input);
+        }
+    }
 }
 
 abstract class Handler {
