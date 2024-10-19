@@ -10,7 +10,6 @@
 - org.springframework.boot:spring-boot-starter-test:test
 - org.springframework.boot:spring-boot-configuration-processor
 - org.projectlombok:lombok:provided
-- org.junit.platform:junit-platform-suite:test
 - org.mockito:mockito-inline:5.2.0:test
 - org.springframework.boot:spring-boot-devtools:runtime
 
