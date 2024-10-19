@@ -7,7 +7,7 @@
   - [Screencast Link]()
 - Linxin Zhang, 7221539, [Write role here].
   - [Screencast Link]()
-- Anjali Bodke, 7222106, [Write role here].
+- Anjali Bodke, 7222106, [Added 2 classes for Re-throwing exception and created five unit test files for LogManagerService].
   - [Screencast Link]()
 
 ## Screenshots
