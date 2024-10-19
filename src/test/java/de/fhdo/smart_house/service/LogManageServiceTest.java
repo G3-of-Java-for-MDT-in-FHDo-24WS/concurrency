@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,13 +24,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LogManageServiceTest {
 
-    @Mock
-    private CustomProperties mockCustomProperties;
-
-    @InjectMocks
+    private CustomProperties customProperties;
     private LogManageService logManageService;
-
-    private CustomProperties.LogDir logDir;
     private Path mockBasePath;
     private Path mockChargingStationPath;
 
@@ -34,19 +33,24 @@ public class LogManageServiceTest {
         mockBasePath = Files.createTempDirectory("mock_logs");
         mockChargingStationPath = Files.createDirectory(mockBasePath.resolve("charging_station"));
 
-        logDir = new CustomProperties.LogDir();
+        customProperties = new CustomProperties();
+        CustomProperties.LogDir logDir = new CustomProperties.LogDir();
+        
         logDir.setChargingStation(mockChargingStationPath.toString());
         logDir.setBase(mockBasePath.toString());
+        logDir.setArchive(mockBasePath.toString());
+        logDir.setDefaultDir(mockBasePath.toString());
+        logDir.setEnergySource(mockBasePath.toString());
+        logDir.setSystem(mockBasePath.toString());
+        customProperties.setLogDir(logDir);
     }
 
     @BeforeEach
     void setUp() throws IOException, LogException {
         setupCommonMocks();
 
-        lenient().when(mockCustomProperties.getLogDir()).thenReturn(logDir);
-
         // Initialize logManageService with mock values
-        logManageService = new LogManageService(mockCustomProperties);
+        logManageService = new LogManageService(customProperties);
     }
 
     private void deleteDirectory(Path directoryPath) throws IOException {
@@ -130,7 +134,6 @@ public class LogManageServiceTest {
         Path logFilePath = Files.createFile(mockChargingStationPath.resolve("log_to_archive.log"));
         Path archivePath = Files.createDirectory(mockBasePath.resolve("archive"));
 
-        lenient().when(mockCustomProperties.getLogDir()).thenReturn(logDir);
 
         logManageService.archiveLog(logFilePath);
 
