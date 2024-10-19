@@ -6,7 +6,7 @@
 - Franklin Viegas, 7222134, added two classes for Handling Multiple Exceptions and Unit testing for Potential Exception Throwing.
   - [Screencast Link]()
 - Linxin Zhang, 7221539, added the classes for resource management exception and handling, created 5 unit tests for LogSearchService.
-  - [Screencast Link](https://drive.google.com/file/d/1IOlQkL8RJg0icyVcu_eHeUj-q17048q-/view?usp=sharing)
+  - [Screencast Link](https://drive.google.com/file/d/1qdvcjwSk0XWfyEpFweeAvkmvz283oW8O/view?usp=sharing)
 - Anjali Bodke, 7222106, added 2 classes for Re-throwing exception and created five unit test files for LogManagerService.
   - [Screencast Link]()
 
