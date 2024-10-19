@@ -11,6 +11,6 @@
   - [Screencast Link](https://drive.google.com/file/d/17OwKEdplZOJPU9M12eE23CyFp_c_0433/view?usp=drive_link)
 
 ## Screenshots
-![Alt text](https://imgur.com/a/Ey0ORF2)
+
 ## Requirements
 Please refer [requirements.md](./requirements.md)
