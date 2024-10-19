@@ -13,7 +13,7 @@ public class DirectoryManager {
             }
         } catch (IOException e) {
             System.err.println("Failed to create directory: " + e.getMessage());
-            throw new IOException("Could not create directory: " + path, e); // Re-throwing the exception
+            throw new IOException("Could not create directory: " + path, e); 
         }
     }
 }
