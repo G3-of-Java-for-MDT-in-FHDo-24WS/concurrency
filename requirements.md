@@ -1,9 +1,10 @@
-# Requirements of HA 02: Exception handling and Unit testing
+# Requirements of HA 03: Concurrency
 ## Functions
-- Exception handling
-- Unit testing and test suite
+<!-- TODO -->
 
 ## Dependencies
+<!-- TODO -->
+
 `Format: groupId:artifactId:version`
 
 - org.springframework.boot:spring-boot-starter
