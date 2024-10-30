@@ -3,7 +3,6 @@ package de.fhdo.smart_house.entity;
 import lombok.Data;
 
 @Data
-
 public class Battery {
 	private int capacity;
     private int currentCharge;

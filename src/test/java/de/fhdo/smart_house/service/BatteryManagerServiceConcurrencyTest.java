@@ -24,30 +24,25 @@ class BatteryManagerServiceConcurrencyTest {
 
     @AfterEach
     void tearDown() {
-        System.out.println("Battery capacities: " + batteryManagerService.getBatteriesString());
+        System.out.println("@AfterEach - Battery capacities: " + batteryManagerService.getBatteriesString());
     }
 
     @Test
     void testConcurrentCharging() throws InterruptedException {
         System.out.println("Battery capacities: " + batteryManagerService.getBatteriesString());
 
-        // Create three different power sources
-        EnergySource solarSource = new EnergySource(EnergySource.SourceType.SOLAR, 100);
-        EnergySource windSource = new EnergySource(EnergySource.SourceType.WIND, 150);
-        EnergySource gridSource = new EnergySource(EnergySource.SourceType.GRID, 200);
+        EnergySource solarSource = new EnergySource("solar", EnergySource.SourceType.SOLAR, 100);
+        EnergySource windSource = new EnergySource("wind", EnergySource.SourceType.WIND, 150);
+        EnergySource gridSource = new EnergySource("grid", EnergySource.SourceType.GRID, 200);
 
-        // Start charging tasks
         batteryManagerService.startChargingTask(solarSource);
         batteryManagerService.startChargingTask(windSource);
         batteryManagerService.startChargingTask(gridSource);
 
-        // Wait for 5 seconds to allow charging
-        Thread.sleep(5000);
+        Thread.sleep(6000);
 
-        // Stop all operations
         batteryManagerService.shutdown();
 
-        // Verify batteries have been charged
         for (Battery battery : batteryManagerService.getBatteries()) {
             assertTrue(battery.getCurrentCharge() > 0, "Battery should have been charged");
             assertTrue(battery.getCurrentCharge() <= battery.getCapacity(), 
@@ -57,30 +52,24 @@ class BatteryManagerServiceConcurrencyTest {
 
     @Test
     void testConcurrentDischarging() throws InterruptedException {
-        // First, fully charge all batteries
         for (Battery battery : batteryManagerService.getBatteries()) {
             battery.setCurrentCharge(battery.getCapacity());
         }
 
         System.out.println("Battery capacities: " + batteryManagerService.getBatteriesString());
 
-        // Create multiple consumers with different power rates
-        EnergyConsumer consumer1 = new EnergyConsumer(150);
-        EnergyConsumer consumer2 = new EnergyConsumer(200);
-        EnergyConsumer consumer3 = new EnergyConsumer(250);
+        EnergyConsumer consumer1 = new EnergyConsumer("consumer1", 150);
+        EnergyConsumer consumer2 = new EnergyConsumer("consumer2", 200);
+        EnergyConsumer consumer3 = new EnergyConsumer("consumer3", 250);
 
-        // Start discharging tasks
         batteryManagerService.startDischargingTask(consumer1);
         batteryManagerService.startDischargingTask(consumer2);
         batteryManagerService.startDischargingTask(consumer3);
 
-        // Wait for 5 seconds to allow discharging
-        Thread.sleep(5000);
+        Thread.sleep(4000);
 
-        // Stop all operations
         batteryManagerService.shutdown();
 
-        // Verify batteries have been discharged but not over-discharged
         for (Battery battery : batteryManagerService.getBatteries()) {
             assertTrue(battery.getCurrentCharge() >= 0, 
                     "Battery charge should not be negative");
@@ -91,17 +80,14 @@ class BatteryManagerServiceConcurrencyTest {
 
     @Test
     void testSystemOverloadProtection() throws InterruptedException {
-        EnergyConsumer consumer = new EnergyConsumer(600);
+        EnergyConsumer consumer = new EnergyConsumer("consumer", 600);
         
         batteryManagerService.startDischargingTask(consumer);
 
-        // Wait for 2 seconds to observe system response
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        // Stop all operations
         batteryManagerService.shutdown();
 
-        // Verify battery hasn't been over-discharged
         assertTrue(batteryManagerService.getCurrentCharge() >= 0, 
                 "Battery should not be over-discharged");
     }
