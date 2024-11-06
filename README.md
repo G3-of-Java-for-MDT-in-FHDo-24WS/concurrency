@@ -21,8 +21,8 @@ Team Video: [Screencast Link]()
 
 - Yanal Al Halabi, 7221683, I mainly worked on the Battery class and contributed to the BatteryManagerService.
   - [Screencast Link](https://drive.google.com/file/d/1RVVtSmZ9eWW0XamtcSdqhVoF7RYMWg5W/view?usp=sharing)
-- Franklin Viegas, 7222134, [role].
-  - [Screencast Link]()
+- Franklin Viegas, 7222134, My role was creation of Entities JAVA classes to further help BatteryManagerService.
+  - [Screencast Link](https://drive.google.com/file/d/1I0g8ur8tg82fY7tX1Z-tN-i1ASuHBOpz/view?usp=sharing)
 - Linxin Zhang, 7221539, I mainly worked on the rest parts of BatteryManagerService, including 4 help methods and 2 methods of controlling the charging and discharging from different source.
   - [Screencast Link](https://drive.google.com/file/d/1hCDVzhnGMvP36t4URUCsaXHBTJk9-PHn/view?usp=sharing)
 - Anjali Bodke, 7222106, [role].
