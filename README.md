@@ -26,7 +26,7 @@ Team Video: [Screencast Link]()
 - Linxin Zhang, 7221539, I mainly worked on the rest parts of BatteryManagerService, including 4 help methods and 2 methods of controlling the charging and discharging from different source.
   - [Screencast Link](https://drive.google.com/file/d/1hCDVzhnGMvP36t4URUCsaXHBTJk9-PHn/view?usp=sharing)
 - Anjali Bodke, 7222106, My role was to create multiple tests to ensure efficiency of BatteryManagerService.
-  - [Screencast Link](https://drive.google.com/file/d/1KJn70GG5OSZRFKCLm2xzQVALeavebi-H/view?usp=drive_link)
+  - [Screencast Link](https://drive.google.com/file/d/1KJn70GG5OSZRFKCLm2xzQVALeavebi-H/view?usp=sharing)
 
 ## Screenshots
 - testConcurrentCharging
